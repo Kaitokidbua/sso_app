@@ -1,0 +1,10 @@
+streamlit>=1.36
+pymongo>=4.6
+certifi>=2024.0
+bcrypt>=4.1
+pandas>=2.0
+duckdb>=0.10
+plotly>=5.20
+snowflake-connector-python[pandas]>=3.6
+pyarrow>=14
+toml>=0.10
