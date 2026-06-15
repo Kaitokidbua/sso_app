@@ -1025,6 +1025,16 @@ def bootstrap_state() -> None:
 
 def main() -> None:
     bootstrap_state()
+
+    # ปุ่มกลับ / เริ่มแชทใหม่ (ข้อ 4)
+    _b1, _b2, _b3 = st.columns([1, 1, 4])
+    with _b1:
+        st.page_link("views/home.py", label="⬅️ กลับหน้าแรก")
+    with _b2:
+        if st.button("🔄 เริ่มแชทใหม่", use_container_width=True):
+            st.session_state.pop("messages", None)
+            st.rerun()
+
     popular_questions: list[dict[str, Any]] = []
 
     db_status = True
@@ -1074,6 +1084,30 @@ def main() -> None:
                 label = f"{item['group_label']}  ({item['count']})"
                 if st.button(label, key=f"pop_{i}", use_container_width=True):
                     st.session_state.pending_prompt = item["question"]
+                    st.rerun()
+    else:
+        # ข้อ 3: คำถามตั้งต้น (FAQ) โชว์เสมอ ถ้ายังไม่มีประวัติคำถามยอดฮิต
+        st.markdown(
+            """
+            <div class="popular-section">
+                <div class="section-label">คำถามยอดฮิต</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        default_questions = [
+            "มาตรา 33 กับ 39 ต่างกันยังไง",
+            "ลาคลอดได้สิทธิอะไรบ้าง",
+            "ว่างงานได้เงินชดเชยเท่าไหร่",
+            "บำนาญชราภาพคำนวณยังไง",
+            "ม.40 มีกี่ทางเลือก",
+            "ทำฟันใช้สิทธิได้กี่บาท",
+        ]
+        d_cols = st.columns(3, gap="small")
+        for i, q in enumerate(default_questions):
+            with d_cols[i % 3]:
+                if st.button(q, key=f"faq_{i}", use_container_width=True):
+                    st.session_state.pending_prompt = q
                     st.rerun()
 
     st.markdown("<hr class='main-divider'>", unsafe_allow_html=True)

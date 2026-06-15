@@ -39,7 +39,7 @@ with st.form("member_form"):
 
     c3, c4 = st.columns(2)
     age    = c3.number_input("อายุปัจจุบัน", 15, 80, int(prof["age"]))
-    retire = c4.number_input("อายุที่ต้องการเกษียณ", 50, 80, int(prof["retire_age"]))
+    retire = c4.number_input("อายุที่ต้องการเกษียณ", 45, 80, int(prof["retire_age"]))
 
     c5, c6 = st.columns(2)
     year   = c5.number_input("ปี พ.ศ. ที่เริ่มคำนวณ", 2560, 2600,
