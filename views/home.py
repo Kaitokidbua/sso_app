@@ -13,7 +13,7 @@ require_login()
 prof = {**DEFAULT_PROFILE, **get_profile()}
 
 RETIRE_AGE = int(prof.get("retire_age", 55))   # อายุเกษียณ (จาก profile)
-PENSION_MONTHS = 120             # ต้องส่งสมทบครบ 120 เดือนจึงมีสิทธิบำนาญ
+PENSION_MONTHS = 180             # ต้องส่งสมทบครบ 180 เดือนจึงมีสิทธิบำนาญ
 
 # ---------- ค่าที่คำนวณจาก profile ----------
 months = int(prof["months_contributed"])

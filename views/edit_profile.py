@@ -48,10 +48,13 @@ with st.form("member_form"):
                           index=int(prof["start_month"]) - 1,
                           format_func=lambda m: MONTHS_TH[m])
 
-    months = st.number_input("จำนวนเดือนที่ส่งเงินสมทบมาแล้ว", 0, 600,
-                             int(prof["months_contributed"]),
-                             help="ใช้ประเมินบำเหน็จ/บำนาญ และโบนัส ม.40 "
-                                  "ให้รวมกับเดือนที่จะส่งในอนาคต")
+    # ข้อ 3: ไม่ให้กรอกเดือนสมทบเอง — คำนวณจากปี/เดือนที่เริ่มส่ง
+    import datetime
+    _cur_be = datetime.date.today().year + 543
+    _auto_months = max(0, (_cur_be - int(year)) * 12
+                       + (datetime.date.today().month - int(month)))
+    st.info(f"📊 จำนวนเดือนที่ส่งเงินสมทบมาแล้ว (คำนวณอัตโนมัติ): "
+            f"**{_auto_months} เดือน** — คิดจากปี/เดือนที่เริ่มส่งจนถึงปัจจุบัน")
 
     # ---------- การเงิน ----------
     st.subheader("ข้อมูลการเงิน")
@@ -81,7 +84,6 @@ with st.form("member_form"):
                 "mattra": mattra, "m40_choice": m40,
                 "age": int(age), "retire_age": int(retire),
                 "start_year_be": int(year), "start_month": int(month),
-                "months_contributed": int(months),
                 "salary": int(salary), "salary_growth_pct": float(growth),
                 "extra_saving_m40": float(extra), "consent": True,
             })

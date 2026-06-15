@@ -95,4 +95,10 @@ fig3 = px.line(agg["trend"], x="year", y="insured", markers=True,
 st.plotly_chart(fig3, use_container_width=True)
 
 with st.expander("ดูข้อมูลดิบ"):
-    st.dataframe(df[df.year == year], use_container_width=True)
+    _raw = df[df.year == year].rename(columns={
+        "year": "ปี (พ.ศ.)", "province": "จังหวัด", "mattra": "มาตรา",
+        "insured": "จำนวนผู้ประกันตน (คน)", "claims": "จำนวนการใช้สิทธิ (ครั้ง)",
+    })
+    st.dataframe(_raw, use_container_width=True)
+    st.caption("หมายเหตุ: **จำนวนผู้ประกันตน** = จำนวนคนที่ขึ้นทะเบียนในมาตรานั้น | "
+               "**จำนวนการใช้สิทธิ** = จำนวนครั้งที่มีการเบิก/ใช้สิทธิประโยชน์ในปีนั้น")
