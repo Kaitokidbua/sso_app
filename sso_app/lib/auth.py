@@ -36,6 +36,10 @@ def _find_user(username: str):
 def signup(username: str, password: str, profile: dict):
     if not username or not password:
         return False, "กรอกชื่อผู้ใช้และรหัสผ่านให้ครบ"
+    if len(password) < 6:
+        return False, "รหัสผ่านต้องยาวอย่างน้อย 6 ตัวอักษร"
+    if not any(c.islower() for c in password) or not any(c.isupper() for c in password):
+        return False, "รหัสผ่านต้องมีทั้งตัวพิมพ์เล็กและตัวพิมพ์ใหญ่ผสมกัน"
     if _find_user(username):
         return False, "มีชื่อผู้ใช้นี้แล้ว ลองชื่ออื่น"
 

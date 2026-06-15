@@ -31,7 +31,8 @@ with tab_login:
 # ---------- SIGN UP ----------
 with tab_signup:
     su = st.text_input("ตั้งชื่อผู้ใช้", key="su_u")
-    sp = st.text_input("ตั้งรหัสผ่าน", type="password", key="su_p")
+    sp = st.text_input("ตั้งรหัสผ่าน", type="password", key="su_p",
+                       help="อย่างน้อย 6 ตัว และต้องมีตัวพิมพ์เล็ก+ใหญ่ผสมกัน")
 
     st.markdown("**ข้อมูลเบื้องต้น** (แก้ภายหลังที่หน้าแรกได้)")
     c1, c2 = st.columns(2)
