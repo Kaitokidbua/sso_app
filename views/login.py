@@ -43,12 +43,16 @@ with tab_signup:
     prov   = c2.selectbox("จังหวัด", PROVINCES, key="su_prov")
     mattra = st.selectbox("มาตรา", list(MATTRA_OPTIONS.keys()),
                           format_func=lambda k: MATTRA_OPTIONS[k], key="su_mat")
+    start_year = st.number_input("ปี พ.ศ. ที่เริ่มส่งเงินประกันสังคม", 2547, 2600,
+                                 DEFAULT_PROFILE["start_year_be"],
+                                 step=1, format="%d", key="su_year")
 
     if st.button("สมัครสมาชิก", type="primary", use_container_width=True):
         profile = {
             **DEFAULT_PROFILE,
             "full_name": name, "age": int(age), "gender": gender,
             "province": prov, "mattra": mattra,
+            "start_year_be": int(start_year), "start_month": 1,
         }
         ok, msg = signup(su, sp, profile)
         if ok:

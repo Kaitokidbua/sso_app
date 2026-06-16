@@ -42,7 +42,7 @@ with st.form("member_form"):
     retire = c4.number_input("อายุที่ต้องการเกษียณ", 45, 80, int(prof["retire_age"]), step=1, format="%d")
 
     c5, c6 = st.columns(2)
-    year   = c5.number_input("ปี พ.ศ. ที่เริ่มคำนวณ", 2560, 2600,
+    year   = c5.number_input("ปี พ.ศ. ที่เริ่มคำนวณ", 2547, 2600,
                              int(prof["start_year_be"]), step=1, format="%d")
     month  = c6.selectbox("เดือนที่เริ่มคำนวณ", list(range(1, 13)),
                           index=int(prof["start_month"]) - 1,
