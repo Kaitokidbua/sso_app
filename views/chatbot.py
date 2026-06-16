@@ -530,6 +530,20 @@ def build_ai_messages(question: str) -> list[dict[str, str]]:
         f"secondary={', '.join(scope_signal['secondary_keywords']) or '-'}"
     )
     messages.append({"role": "system", "content": signal_note})
+
+    # RAG: ดึงข้อมูลที่ตรงที่สุดจาก knowledge_base มาเป็นบริบทให้ Gemini ตอบ (กันมั่ว)
+    kb = find_best_answer(question)
+    kb_answer = kb.get("answer", "") if isinstance(kb, dict) else ""
+    if kb_answer:
+        messages.append({
+            "role": "system",
+            "content": (
+                "ใช้ข้อมูลอ้างอิงต่อไปนี้จากฐานข้อมูลประกันสังคมเป็นหลักในการตอบ "
+                "ห้ามเพิ่มตัวเลขหรือเงื่อนไขที่ไม่มีในข้อมูลนี้ "
+                "ถ้าข้อมูลนี้ไม่พอ ให้บอกว่ายังยืนยันข้อมูลส่วนนั้นไม่ได้:\n\n" + kb_answer
+            ),
+        })
+
     history = st.session_state.get("messages", [])
 
     for message in history[-6:]:
@@ -593,17 +607,17 @@ def generate_gemini_answer(question: str) -> dict[str, Any]:
     model = get_gemini_model()
     api_key = get_gemini_api_key()
     if not api_key:
+        # ไม่มี Gemini key -> โหมด Non-AI: ตอบจาก knowledge_base ตรงๆ (ไม่ขึ้น error)
+        kb = find_best_answer(question)
         return {
-            "topic": AI_FALLBACK_TOPIC,
-            "answer": (
-                "ยังไม่ได้ตั้งค่า Gemini API key กรุณาเพิ่ม GEMINI_API_KEY ใน secret.toml "
-                "หรือ environment variable ก่อนใช้งาน"
-            ),
-            "score": 0,
-            "matched": False,
-            "source": "ai_config_missing",
+            "topic": kb.get("topic", AI_FALLBACK_TOPIC) if isinstance(kb, dict) else AI_FALLBACK_TOPIC,
+            "answer": kb.get("answer") if isinstance(kb, dict) and kb.get("answer")
+                      else "ขออภัย ยังไม่มีข้อมูลส่วนนี้ในระบบ แนะนำให้สอบถามสายด่วน 1506",
+            "score": kb.get("score", 0) if isinstance(kb, dict) else 0,
+            "matched": kb.get("matched", False) if isinstance(kb, dict) else False,
+            "source": "knowledge_base",
             "model": model,
-            "status_text": "Gemini API key is missing",
+            "status_text": "ตอบจาก knowledge_base (โหมด Non-AI)",
         }
 
     model_path = model if model.startswith("models/") else f"models/{model}"
