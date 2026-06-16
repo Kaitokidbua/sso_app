@@ -38,12 +38,12 @@ with st.form("member_form"):
                        help="ใช้เฉพาะผู้ประกันตนมาตรา 40")
 
     c3, c4 = st.columns(2)
-    age    = c3.number_input("อายุปัจจุบัน", 15, 80, int(prof["age"]))
-    retire = c4.number_input("อายุที่ต้องการเกษียณ", 45, 80, int(prof["retire_age"]))
+    age    = c3.number_input("อายุปัจจุบัน", 15, 80, int(prof["age"]), step=1, format="%d")
+    retire = c4.number_input("อายุที่ต้องการเกษียณ", 45, 80, int(prof["retire_age"]), step=1, format="%d")
 
     c5, c6 = st.columns(2)
     year   = c5.number_input("ปี พ.ศ. ที่เริ่มคำนวณ", 2560, 2600,
-                             int(prof["start_year_be"]))
+                             int(prof["start_year_be"]), step=1, format="%d")
     month  = c6.selectbox("เดือนที่เริ่มคำนวณ", list(range(1, 13)),
                           index=int(prof["start_month"]) - 1,
                           format_func=lambda m: MONTHS_TH[m])

@@ -40,6 +40,8 @@ def signup(username: str, password: str, profile: dict):
         return False, "รหัสผ่านต้องยาวอย่างน้อย 6 ตัวอักษร"
     if not any(c.islower() for c in password) or not any(c.isupper() for c in password):
         return False, "รหัสผ่านต้องมีทั้งตัวพิมพ์เล็กและตัวพิมพ์ใหญ่ผสมกัน"
+    if not password.isascii():
+        return False, "รหัสผ่านควรเป็นภาษาอังกฤษ ตัวเลข หรือสัญลักษณ์เท่านั้น (ไม่ใช้ภาษาไทย)"
     if _find_user(username):
         return False, "มีชื่อผู้ใช้นี้แล้ว ลองชื่ออื่น"
 

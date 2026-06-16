@@ -80,16 +80,16 @@ st.subheader("บริการ")
 s1, s2, s3, s4 = st.columns(4)
 with s1:
     with st.container(border=True):
-        st.markdown("### 🔍"); st.page_link("views/check_benefits.py", label="เช็คสิทธิของฉัน")
+        st.page_link("views/check_benefits.py", label="เช็คสิทธิของฉัน", icon="🔍", use_container_width=True)
 with s2:
     with st.container(border=True):
-        st.markdown("### 🎁"); st.page_link("views/compare_mattra.py", label="สิทธิประโยชน์ / เทียบมาตรา")
+        st.page_link("views/compare_mattra.py", label="สิทธิประโยชน์ / เทียบมาตรา", icon="🎁", use_container_width=True)
 with s3:
     with st.container(border=True):
-        st.markdown("### 📊"); st.page_link("views/retirement.py", label="วางแผนเกษียณ")
+        st.page_link("views/retirement.py", label="วางแผนเกษียณ", icon="📊", use_container_width=True)
 with s4:
     with st.container(border=True):
-        st.markdown("### 💬"); st.page_link("views/chatbot.py", label="แชทกับ AI")
+        st.page_link("views/chatbot.py", label="แชทกับ AI", icon="💬", use_container_width=True)
 
 # ---------- 3) news + 4) CTA ----------
 news = [

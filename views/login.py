@@ -37,7 +37,8 @@ with tab_signup:
     st.markdown("**ข้อมูลเบื้องต้น** (แก้ภายหลังที่หน้าแรกได้)")
     c1, c2 = st.columns(2)
     name   = c1.text_input("ชื่อ-นามสกุล", key="su_name")
-    age    = c2.number_input("อายุ", 15, 80, DEFAULT_PROFILE["age"], key="su_age")
+    age    = c2.number_input("อายุ", 15, 80, DEFAULT_PROFILE["age"],
+                             step=1, format="%d", key="su_age")
     gender = c1.selectbox("เพศ", GENDER_OPTIONS, key="su_gender")
     prov   = c2.selectbox("จังหวัด", PROVINCES, key="su_prov")
     mattra = st.selectbox("มาตรา", list(MATTRA_OPTIONS.keys()),
@@ -50,4 +51,9 @@ with tab_signup:
             "province": prov, "mattra": mattra,
         }
         ok, msg = signup(su, sp, profile)
-        (st.success if ok else st.error)(msg)
+        if ok:
+            st.success(msg)
+            login(su, sp)        # สมัครเสร็จเข้าระบบให้เลย (ข้อ 3)
+            st.rerun()
+        else:
+            st.error(msg)
