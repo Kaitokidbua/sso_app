@@ -538,9 +538,11 @@ def build_ai_messages(question: str) -> list[dict[str, str]]:
         messages.append({
             "role": "system",
             "content": (
-                "ใช้ข้อมูลอ้างอิงต่อไปนี้จากฐานข้อมูลประกันสังคมเป็นหลักในการตอบ "
-                "ห้ามเพิ่มตัวเลขหรือเงื่อนไขที่ไม่มีในข้อมูลนี้ "
-                "ถ้าข้อมูลนี้ไม่พอ ให้บอกว่ายังยืนยันข้อมูลส่วนนั้นไม่ได้:\n\n" + kb_answer
+                "ใช้ข้อมูลอ้างอิงจากฐานข้อมูลประกันสังคมด้านล่างเป็นแหล่งหลักของตัวเลข "
+                "อัตราเงิน และเงื่อนไข (ห้ามแต่งตัวเลขที่ขัดกับข้อมูลนี้) "
+                "แต่ให้เรียบเรียงคำตอบด้วยภาษาที่เป็นธรรมชาติ อ่านง่าย เป็นกันเอง "
+                "ถ้าข้อมูลอ้างอิงไม่ครอบคลุม ให้ตอบตามความรู้ทั่วไปเรื่องประกันสังคมไทย "
+                "อย่างระมัดระวัง และแนะนำให้โทรสายด่วน 1506 เพื่อยืนยัน:\n\n" + kb_answer
             ),
         })
 
@@ -1085,49 +1087,6 @@ def main() -> None:
         """,
         unsafe_allow_html=True,
     )
-
-    if popular_questions:
-        st.markdown(
-            """
-            <div class="popular-section">
-                <div class="section-label">POPULAR QUESTIONS</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        pop_cols = st.columns([1] * min(3, len(popular_questions)), gap="small")
-        row_size = 3
-        for i, item in enumerate(popular_questions):
-            col_idx = i % row_size
-            with pop_cols[col_idx]:
-                label = f"{item['group_label']}  ({item['count']})"
-                if st.button(label, key=f"pop_{i}", use_container_width=True):
-                    st.session_state.pending_prompt = item["question"]
-                    st.rerun()
-    else:
-        # ข้อ 3: คำถามตั้งต้น (FAQ) โชว์เสมอ ถ้ายังไม่มีประวัติคำถามยอดฮิต
-        st.markdown(
-            """
-            <div class="popular-section">
-                <div class="section-label">คำถามยอดฮิต</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        default_questions = [
-            "มาตรา 33 กับ 39 ต่างกันยังไง",
-            "ลาคลอดได้สิทธิอะไรบ้าง",
-            "ว่างงานได้เงินชดเชยเท่าไหร่",
-            "บำนาญชราภาพคำนวณยังไง",
-            "ม.40 มีกี่ทางเลือก",
-            "ทำฟันใช้สิทธิได้กี่บาท",
-        ]
-        d_cols = st.columns(3, gap="small")
-        for i, q in enumerate(default_questions):
-            with d_cols[i % 3]:
-                if st.button(q, key=f"faq_{i}", use_container_width=True):
-                    st.session_state.pending_prompt = q
-                    st.rerun()
 
     st.markdown("<hr class='main-divider'>", unsafe_allow_html=True)
 
