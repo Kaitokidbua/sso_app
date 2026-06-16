@@ -157,7 +157,7 @@ st.markdown(
 
         .block-container {
             max-width: 700px;
-            padding-top: 2rem;
+            padding-top: 4rem;
             padding-bottom: 2rem;
         }
 
@@ -1026,14 +1026,19 @@ def bootstrap_state() -> None:
 def main() -> None:
     bootstrap_state()
 
+    # เว้นระยะบนกันปุ่มโดน toolbar ของ Streamlit บัง
+    st.markdown("<div style='height:0.5rem'></div>", unsafe_allow_html=True)
+
     # ปุ่มกลับ / เริ่มแชทใหม่ (ข้อ 4)
-    _b1, _b2, _b3 = st.columns([1, 1, 4])
+    _b1, _b2, _b3 = st.columns([1.2, 1.2, 4])
     with _b1:
         st.page_link("views/home.py", label="⬅️ กลับหน้าแรก")
     with _b2:
         if st.button("🔄 เริ่มแชทใหม่", use_container_width=True):
             st.session_state.pop("messages", None)
             st.rerun()
+
+    st.markdown("<div style='height:0.5rem'></div>", unsafe_allow_html=True)
 
     popular_questions: list[dict[str, Any]] = []
 
