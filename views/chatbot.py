@@ -1144,30 +1144,9 @@ def main() -> None:
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    kb_answer = find_best_answer(prompt)
-
-    if kb_answer.get("matched") and kb_answer.get("score", 0) >= 90:
-        answer_payload = kb_answer
-        answer_payload.setdefault("source", "knowledge_base")
-        answer_payload.setdefault("model", None)
-        answer_payload.setdefault("status_text", "ตอบจากฐานความรู้")
-    elif kb_answer.get("matched"):
-        prompt_with_context = f"""
-        ข้อมูลอ้างอิงจากฐานความรู้:
-
-        {kb_answer['answer']}
-
-        กฎ:
-        - ใช้ข้อมูลอ้างอิงด้านบนเป็นแหล่งข้อมูลหลัก
-        - หากข้อมูลอ้างอิงขัดแย้งกับความรู้เดิมของคุณ ให้เชื่อข้อมูลอ้างอิง
-        - ห้ามเพิ่มตัวเลขหรือเงื่อนไขที่ไม่มีในข้อมูลอ้างอิง
-
-        คำถาม:
-        {prompt}
-        """
-        answer_payload = generate_ai_answer(prompt_with_context)
-    else:
-        answer_payload = generate_ai_answer(prompt)
+    # ให้ทุกคำถามตอบผ่าน Gemini (build_ai_messages จะดึง knowledge_base มา ground ให้เอง)
+    # ถ้าไม่มี key -> generate_gemini_answer จะ fallback ไป knowledge_base ให้อัตโนมัติ
+    answer_payload = generate_ai_answer(prompt)
     record_id = save_chat_log(prompt, answer_payload) if db_status else None
 
     assistant_message = {
