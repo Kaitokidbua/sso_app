@@ -36,7 +36,7 @@ DEFAULT_OLLAMA_MODEL = "gemma2:latest"
 DEFAULT_OLLAMA_BASE_URL = "http://localhost:11434"
 DEFAULT_AI_PROVIDER = "gemini"
 DEFAULT_GEMINI_MODEL = "gemini-2.0-flash"
-DEFAULT_MAX_OUTPUT_TOKENS = 1024
+DEFAULT_MAX_OUTPUT_TOKENS = 512
 AI_FALLBACK_TOPIC = "AI fallback"
 OUT_OF_SCOPE_TOPIC = "out_of_scope"
 NON_CANONICAL_TOPICS = {"fallback", AI_FALLBACK_TOPIC, OUT_OF_SCOPE_TOPIC}
@@ -542,13 +542,13 @@ def build_ai_messages(question: str) -> list[dict[str, str]]:
                 "อัตราเงิน และเงื่อนไข (ห้ามแต่งตัวเลขที่ขัดกับข้อมูลนี้) "
                 "แต่ให้เรียบเรียงคำตอบด้วยภาษาที่เป็นธรรมชาติ อ่านง่าย เป็นกันเอง "
                 "ถ้าข้อมูลอ้างอิงไม่ครอบคลุม ให้ตอบตามความรู้ทั่วไปเรื่องประกันสังคมไทย "
-                "อย่างระมัดระวัง และแนะนำให้โทรสายด่วน 1506 เพื่อยืนยัน:\n\n" + kb_answer
+                "อย่างระมัดระวัง และแนะนำให้โทรสายด่วน 1506 เพื่อยืนยัน:\n\n" + kb_answer[:800]
             ),
         })
 
     history = st.session_state.get("messages", [])
 
-    for message in history[-6:]:
+    for message in history[-4:]:
         if message["role"] not in {"user", "assistant"}:
             continue
         messages.append({"role": message["role"], "content": message["content"]})
